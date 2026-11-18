@@ -1,0 +1,49 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PathSnap route evaluator</title>
+<link rel="stylesheet" href="vendor/leaflet.css"><script src="vendor/leaflet.min.js"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f5ef;color:#19382f;font:16px system-ui}main{max-width:1080px;margin:auto;padding:28px}h1{font:52px Georgia;margin:0 0 12px}label{display:inline-grid;gap:4px;font-size:14px}section{display:flex;flex-wrap:wrap;align-items:end;gap:12px}button,input,select{font:inherit;padding:8px;border:1px solid #8a9e94;border-radius:4px}button{background:#225b4c;color:white;cursor:pointer}#map{height:58vh;background:#e9ede7;border:1px solid #ced6ca}#status{min-height:24px}small{display:block;margin-top:8px}
+</style><main><h1>PathSnap</h1><section><label>Model laptop API<input id="host" placeholder="http://192.168.1.23:8000"></label><button id="connect">Load trips</button>
+<label>Evaluation trip<select id="trips" aria-label="Evaluation trip"></select></label><button id="run" disabled>Reconstruct route</button></section>
+<p id="status" role="status">Enter the model laptop address and load its trips.</p><div id="map"></div><small>Street names and landmarks load from OpenStreetMap when online. Gray lines show local roads for the supplied demo trips. Blue dashes show GPS observations in time order. Green lines show predicted road segments.</small></main>
+<script>
+const el=id=>document.getElementById(id);
+const map=L.map('map',{preferCanvas:true}).setView([49.85,8.6],12);
+map.attributionControl.setPrefix('Leaflet');
+const streets=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+  maxZoom:19, attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+map.createPane('roadNetwork');
+map.getPane('roadNetwork').style.zIndex=350;
+const network=L.layerGroup().addTo(map);
+const roads=L.layerGroup().addTo(map),gps=L.layerGroup().addTo(map);
+L.control.layers(null,{'Street map (online)':streets,'Local roads':network,'Predicted segments':roads,'GPS trace':gps}).addTo(map);
+const get=async path=>{
+  const r=await fetch(el('host').value.trim().replace(/\/$/,'')+path);
+  if(!r.ok)throw Error('API returned '+r.status);return r.json();
+};
+el('connect').onclick=async()=>{
+  el('run').disabled=true;el('trips').replaceChildren();
+  if(!el('host').value.trim()){el('status').textContent='Enter the API address shown on Laptop 1.';return}
+  try{const ids=await get('/trips');
+    ids.forEach(id=>el('trips').add(new Option(id,id)));el('run').disabled=!ids.length;
+    el('status').textContent=ids.length+' trips available.';
+  }catch(e){el('status').textContent='Connection failed. '+e.message}
+};
+el('run').onclick=async()=>{
+  el('run').disabled=true;el('status').textContent='Reconstructing route…';
+  try{const r=await get('/predict/'+encodeURIComponent(el('trips').value));
+    gps.clearLayers();roads.clearLayers();network.clearLayers();
+    const offline=await fetch('roads/'+encodeURIComponent(r.trip)+'.json').catch(()=>null);
+    if(offline && offline.ok){
+      const lines=await offline.json();
+      L.polyline(lines,{pane:'roadNetwork',color:'#757d78',weight:1.35,opacity:.70,interactive:false}).addTo(network);
+    }
+    L.polyline(r.segments,{color:'#187151',weight:5}).addTo(roads);
+    const trace=L.polyline(r.gps,{color:'#2f63aa',weight:2,dashArray:'4 3'}).addTo(gps);
+    map.fitBounds(trace.getBounds(),{padding:[24,24]});
+    const pct=x=>(100*x).toFixed(2)+'%';
+    el('status').textContent=r.fixes+' fixes  ·  Point accuracy '+(r.accuracy===null?'unavailable':pct(r.accuracy))+'  ·  Route continuity '+pct(r.continuity);
+  }catch(e){el('status').textContent='Prediction failed. '+e.message}finally{el('run').disabled=false}
+};
+</script></html>
