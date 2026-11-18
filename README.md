@@ -6,7 +6,7 @@ A single GPS reading often sits between two roads, especially at junctions and b
 
 On our ten student-test trips, the decoding step raised point accuracy from 81.81% to 85.80% and mean route continuity from 90.27% to 97.58%.
 
-[Technical report](docs/PathSnap_Technical_Report.pdf) | [Demo screenshots](docs/screenshots/)
+[Technical report](Technical_Report.pdf) | [Demo screenshots](screenshots/)
 
 ## Contents
 
