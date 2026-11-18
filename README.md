@@ -178,3 +178,22 @@ $env:OMP_NUM_THREADS = '1'
 ## Data
 
 The raw trip data is supplied separately by the organisers. The screenshots in `docs/screenshots/` come from our two-laptop demonstration.
+
+## Project Structure
+
+| Path | Description |
+|---|---|
+| `PES1UG24AM153_data/` | Data loading, EDA, cleaning and feature engineering |
+| `PES1UG24AM155_models/` | Model training, comparison and Bayesian hyperparameter optimisation |
+| `PES1UG24AM156_decoder/` | HMM and Viterbi route reconstruction |
+| `PES1UG24AM154_demo/` | Demo / integration of the end-to-end pipeline |
+| `artifacts/` | Saved model weights and preprocessing artifacts |
+| `results/` | Experiment results, metrics CSVs and plots |
+| `screenshots/` | UI and API screenshots used in the report |
+| `web/` | Evaluator-facing UI |
+| `launch.py` | Entry point to launch the system |
+| `show_results.py` | Prints / displays saved evaluation results |
+| `START_SERVER.cmd` / `START_UI.cmd` | Windows scripts to start the API (Laptop 1) and UI (Laptop 2) |
+| `RUN_ON_WINDOWS.cmd` | One-click run script for Windows |
+| `requirements.txt` | Python dependencies |
+| `Technical_Report.pdf` | Final technical report |
