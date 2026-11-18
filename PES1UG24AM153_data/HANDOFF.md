@@ -1,0 +1,4 @@
+# Member 1 | Data and features
+Start with one trip. The rows of .nodes are node IDs. Each row of .arcs joins two node IDs and its row number is that trip's arc ID. A .track row is longitude, latitude and time. A .route row is one traversed arc, and many GPS fixes can belong to that arc. Arc IDs restart for every trip.
+
+Run member1_data.prepare from the project root (see README). Inspect results/inventory.csv for 90 trips and the development map in results. Explain why distances use metres, why shortlists contain directed arcs, and why proxy labels require ordered route alignment. Hand the cached per-trip arrays to Member 2. Each observation has six IDs, six feature rows, and a single aligned reference ID. The integer ID never enters the feature vector. Examine large time gaps, repeated coordinates, parallel roads and candidate misses. The code fails visibly on non-finite coordinates or invalid arc references.

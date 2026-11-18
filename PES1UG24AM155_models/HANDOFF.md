@@ -1,0 +1,4 @@
+# Member 2 | Models and Bayesian search
+Run member2_models.train after Member 1 prepares cache/. Compare logistic regression, Gaussian Naive Bayes, a decision tree, Extra Trees and histogram gradient boosting. Use the same three trip-grouped folds. Training uses at most 100 evenly spaced observations per training trip; the student-test partition uses every fix. Each candidate gets a binary match score. Six scores are normalised for decoding. Explain the difference between candidate macro F1 and observation top-1 accuracy.
+
+Show results/models.csv and results/bayesian_trials.csv. Explain why the highest CV macro F1 selected boosting even though Extra Trees had higher student-test top-1 accuracy. Seven search trials returned the original leaf count. Give artifacts/model.joblib and selection.json to Members 3 and 4. Rerun your own experiment and keep its measured outputs.

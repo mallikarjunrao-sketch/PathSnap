@@ -1,0 +1,4 @@
+# Member 3 | Route reconstruction
+Run member3_decoder.evaluate after Member 2 exports the model. A hidden state is a directed arc candidate for the current fix. Its emission score is the model's normalised candidate score. Staying, taking a directly connected arc and jumping to a different arc have different costs. Viterbi stores the best predecessor for each candidate. Backtracking returns one arc per fix. A gap over 15 s or a non-increasing timestamp restarts the sequence. A row with no valid candidate is marked -1. The current generator supplies six candidates for every supplied fix.
+
+Show results/decoder.csv and development_map.html (open from the full project to load local map assets). Compare trip 00000000 with 00000007. Explain why smoothing can increase continuity while losing point accuracy. Review the soft jump treatment for skipped roads. Hand decode() and the evidence to Member 4.

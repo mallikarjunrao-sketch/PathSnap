@@ -1,0 +1,25 @@
+INFO:     Started server process [7]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8765 (Press CTRL+C to quit)
+INFO:     127.0.0.1:34468 - "GET /trips HTTP/1.1" 200 OK
+INFO:     Trip 00000000 returned 2503 predictions, accuracy 0.9480623252097483
+INFO:     127.0.0.1:34478 - "GET /predict/00000000 HTTP/1.1" 200 OK
+INFO:     Trip 00000007 returned 1354 predictions, accuracy 0.8825701624815362
+INFO:     127.0.0.1:34492 - "GET /predict/00000007 HTTP/1.1" 200 OK
+INFO:     Trip 00000009 returned 1049 predictions, accuracy 0.8636796949475691
+INFO:     127.0.0.1:34500 - "GET /predict/00000009 HTTP/1.1" 200 OK
+INFO:     Trip 00000040 returned 2995 predictions, accuracy 0.9175292153589315
+INFO:     127.0.0.1:34514 - "GET /predict/00000040 HTTP/1.1" 200 OK
+INFO:     Trip 00000052 returned 262 predictions, accuracy 0.9465648854961832
+INFO:     127.0.0.1:34518 - "GET /predict/00000052 HTTP/1.1" 200 OK
+INFO:     Trip 00000056 returned 3958 predictions, accuracy 0.9034866093986862
+INFO:     127.0.0.1:34530 - "GET /predict/00000056 HTTP/1.1" 200 OK
+INFO:     Trip 00000065 returned 768 predictions, accuracy 0.8541666666666666
+INFO:     127.0.0.1:32960 - "GET /predict/00000065 HTTP/1.1" 200 OK
+INFO:     Trip 00000076 returned 1486 predictions, accuracy 0.8667563930013459
+INFO:     127.0.0.1:32968 - "GET /predict/00000076 HTTP/1.1" 200 OK
+INFO:     Trip 00000077 returned 3911 predictions, accuracy 0.6880593198670417
+INFO:     127.0.0.1:32984 - "GET /predict/00000077 HTTP/1.1" 200 OK
+INFO:     Trip 00000091 returned 874 predictions, accuracy 0.8672768878718535
+INFO:     127.0.0.1:32986 - "GET /predict/00000091 HTTP/1.1" 200 OK

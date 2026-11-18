@@ -1,0 +1,20 @@
+Training logistic with three trip-grouped folds and a final refit...
+  Fold F1: [0.8816825249560016, 0.8987507136513575, 0.8657271682400349] | Mean: 0.8821 | Student top-1: 81.27%
+Training gaussian_nb with three trip-grouped folds and a final refit...
+  Fold F1: [0.8789934914322745, 0.8949594408145141, 0.8602466444947303] | Mean: 0.8781 | Student top-1: 78.59%
+Training tree with three trip-grouped folds and a final refit...
+  Fold F1: [0.887732850384388, 0.9025419864882009, 0.8676334373688366] | Mean: 0.8860 | Student top-1: 81.60%
+Training extra_trees with three trip-grouped folds and a final refit...
+  Fold F1: [0.8906459700350924, 0.9036570667343313, 0.8683482882921372] | Mean: 0.8876 | Student top-1: 81.98%
+Training hist_boost with three trip-grouped folds and a final refit...
+  Fold F1: [0.8924386590509106, 0.9056642111773662, 0.8712076919853398] | Mean: 0.8898 | Student top-1: 81.81%
+Selected hist_boost. Bayesian search over max_leaf_nodes: [3, 5, 7, 10, 15, 20, 25, 31, 42, 56]
+Trial 1/7: max_leaf_nodes=3, grouped CV macro F1=0.8841
+Trial 2/7: max_leaf_nodes=20, grouped CV macro F1=0.8882
+Trial 3/7: max_leaf_nodes=56, grouped CV macro F1=0.8871
+Trial 4/7: max_leaf_nodes=25, grouped CV macro F1=0.8889
+Trial 5/7: max_leaf_nodes=31, grouped CV macro F1=0.8889
+Trial 6/7: max_leaf_nodes=10, grouped CV macro F1=0.8885
+Trial 7/7: max_leaf_nodes=15, grouped CV macro F1=0.8898
+Training hist_boost_tuned with three trip-grouped folds and a final refit...
+  Fold F1: [0.8924386590509106, 0.9056642111773662, 0.8712076919853398] | Mean: 0.8898 | Student top-1: 81.81%

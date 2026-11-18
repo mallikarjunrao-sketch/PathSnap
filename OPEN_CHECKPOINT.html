@@ -1,0 +1,167 @@
+<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>PathSnap checkpoint</title>
+<style>body{max-width:960px;margin:35px auto;padding:0 18px;color:#203630;font:17px/1.55 system-ui}h2{margin-top:30px}table{border-collapse:collapse}td,th{padding:6px 12px;text-align:left;border-bottom:1px solid #ccd5cc}img{width:100%}</style>
+<h1>PathSnap • EDA and model training</h1><h2>1. Explore the trips</h2><table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>trips</th>
+      <th>GPS_fixes</th>
+      <th>missing_GPS_cells</th>
+      <th>largest_gap_seconds</th>
+    </tr>
+    <tr>
+      <th>split</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>student_test</th>
+      <td>10</td>
+      <td>19160</td>
+      <td>0</td>
+      <td>210.0</td>
+    </tr>
+    <tr>
+      <th>train</th>
+      <td>80</td>
+      <td>208417</td>
+      <td>0</td>
+      <td>153064.0</td>
+    </tr>
+  </tbody>
+</table>
+<img src="results/eda.png" alt="Training GPS map and cumulative trip sizes"><p>Each trip has a GPS track, directed road segments, road nodes and an ordered reference route. A reference row describes a traversed segment. Multiple GPS observations can correspond to it. The alignment estimates point-level labels from the ordered route.</p>
+<h2>2. Compare five classifiers</h2><p>Training used up to 100 evenly spaced fixes per trip from all 80 training trips. For each fix the models scored six candidate roads. Three-fold cross-validation kept whole trips together. Student-test evaluation used every fix on the ten supplied student-test trips.</p>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>model</th>
+      <th>CV macro F1</th>
+      <th>Student macro F1</th>
+      <th>Student top-1</th>
+      <th>Log loss (candidate present)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Logistic regression</td>
+      <td>0.8821</td>
+      <td>0.8897</td>
+      <td>0.8127</td>
+      <td>0.5914</td>
+    </tr>
+    <tr>
+      <td>Gaussian Naive Bayes</td>
+      <td>0.8781</td>
+      <td>0.8735</td>
+      <td>0.7859</td>
+      <td>0.9291</td>
+    </tr>
+    <tr>
+      <td>Decision tree</td>
+      <td>0.8860</td>
+      <td>0.8916</td>
+      <td>0.8160</td>
+      <td>0.5013</td>
+    </tr>
+    <tr>
+      <td>Extra Trees</td>
+      <td>0.8876</td>
+      <td>0.8939</td>
+      <td>0.8198</td>
+      <td>0.5072</td>
+    </tr>
+    <tr>
+      <td>Histogram gradient boosting</td>
+      <td>0.8898</td>
+      <td>0.8929</td>
+      <td>0.8181</td>
+      <td>0.4630</td>
+    </tr>
+  </tbody>
+</table>
+<img src="results/model_comparison.png" alt="Grouped CV and student-test scores for the five models"><p><strong>Histogram gradient boosting</strong> had the highest mean grouped CV macro F1 (0.8898). It selected the aligned reference road on 81.81% of student-test GPS observations. These scores describe the classifier before route decoding.</p>
+<h2>3. Bayesian hyperparameter tuning</h2><p>Selected model: Histogram gradient boosting. Parameter: <code>max_leaf_nodes</code>. Search space: [3, 5, 7, 10, 15, 20, 25, 31, 42, 56]. The first three trials sampled the range. A Gaussian process then used the previous scores to select four further settings by expected improvement. Each setting used the same three training folds.</p>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>trial</th>
+      <th>max_leaf_nodes</th>
+      <th>Grouped CV macro F1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>3</td>
+      <td>0.88408</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>20</td>
+      <td>0.88824</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>56</td>
+      <td>0.88708</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>25</td>
+      <td>0.88887</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>31</td>
+      <td>0.88894</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>10</td>
+      <td>0.88848</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>15</td>
+      <td>0.88977</td>
+    </tr>
+  </tbody>
+</table>
+<h3>Before and after tuning</h3><table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>CV macro F1</th>
+      <th>Student macro F1</th>
+      <th>Student top-1</th>
+      <th>Log loss</th>
+      <th>Inference (s)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Before tuning</th>
+      <td>0.8898</td>
+      <td>0.8929</td>
+      <td>0.8181</td>
+      <td>0.4630</td>
+      <td>0.1962</td>
+    </tr>
+    <tr>
+      <th>After tuning</th>
+      <td>0.8898</td>
+      <td>0.8929</td>
+      <td>0.8181</td>
+      <td>0.4630</td>
+      <td>0.2139</td>
+    </tr>
+  </tbody>
+</table>
+<p>Best tested setting: <strong>max_leaf_nodes = 15</strong>. Change in student top-1 accuracy: +0.00 percentage points.</p>
+<p><a href="results/inventory.csv">Trip inventory</a> · <a href="results/models.csv">Experiment results</a> · <a href="results/bayesian_trials.csv">Tuning trials</a></p>
+<p>AI-assisted reference run on the supplied development data.</p>

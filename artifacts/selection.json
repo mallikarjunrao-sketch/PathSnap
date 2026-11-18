@@ -1,0 +1,18 @@
+{
+  "winner": "hist_boost",
+  "parameter": "max_leaf_nodes",
+  "domain": [
+    3,
+    5,
+    7,
+    10,
+    15,
+    20,
+    25,
+    31,
+    42,
+    56
+  ],
+  "value": 15,
+  "seed": 42
+}
